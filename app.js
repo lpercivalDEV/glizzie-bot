@@ -55,6 +55,7 @@ app.get("/", (req, res) => {
 });
 
 app.post("/", upload.single("file-to-upload"), async (req, res) => {
+  let hotDogCount = 0
   try {
     // Upload image to cloudinary
     const result = await cloudinary.uploader.upload(req.file.path);
@@ -68,7 +69,16 @@ app.post("/", upload.single("file-to-upload"), async (req, res) => {
         // Print objects bounding box and confidence
         if (objects.length) {
           console.log(`${objects.length} object${objects.length == 1 ? '' : 's'} found:`);
-          for (const obj of objects) { console.log(`    ${obj.object} (${obj.confidence.toFixed(2)}) at ${formatRectObjects(obj.rectangle)}`); }
+          for (const obj of objects) {
+            if (obj.object === "Hot dog") {
+              hotDogCount = hotDogCount + 1;
+              console.log(hotDogCount);
+              console.log("capital");
+            }else if (obj.object === "hot dog") {
+              hotDogCount = hotDogCount + 1;
+              console.log("small");
+            }
+             console.log(`    ${obj.object} (${obj.confidence.toFixed(2)}) at ${formatRectObjects(obj.rectangle)}`); }
         } else { console.log('No objects found.'); }
         // </snippet_objects>
 
@@ -79,7 +89,7 @@ app.post("/", upload.single("file-to-upload"), async (req, res) => {
             + `right=${rect.x + rect.w}`.padEnd(10) + `(${rect.w}x${rect.h})`;
         }
 
-    res.render("result.ejs", { brands: brands, img: brandURLImage });
+    res.render("result.ejs", { count: hotDogCount, img: objectURL });
   } catch (err) {
     console.log(err);
   }

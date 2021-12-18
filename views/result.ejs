@@ -7,8 +7,14 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    
-      <img src="<%= img%>" alt="uploaded image" />
+
+      <% if(count > 0){ %>
+        <img src="<%= img%>" alt="Hot Dog" />
+        <h1>Glizzie!</h1>
+      <%}else{%>
+          <img src="<%= img%>" alt="Not a hot dog" />
+        <h1>Not a glizzie.</h1>
+      <%}%>
 
       <form action="/" enctype="multipart/form-data" method="post">
       <input type="file" name="file-to-upload" />
